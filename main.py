@@ -3,6 +3,7 @@ import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import re
 import json
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -24,8 +25,13 @@ def home():
 	vYearSelected = ['']*len(vYears)
 	
 	# Get data from url query string
-	iYear = int(request.args.get('year'))
-	iMonth = int(request.args.get('month'))
+	# If there isn't one, fill it with the current date
+	try:
+		iYear = int(request.args.get('year'))
+		iMonth = int(request.args.get('month'))
+	except:
+		iYear = datetime.today().year
+		iMonth = datetime.today().month
 	
 	# Mark selected values according to query string
 	vMonthSelected[iMonth-1] = "selected"
